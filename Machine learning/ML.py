@@ -41,16 +41,14 @@ def prepare_output(v):
 
 
 def prepare_input_l(v):
-    # stemmer = Stemmer("english", ignore_stopwords=True)
     lemmatizer = WordNetLemmatizer()
     in_vec = ["" for x in range(len(v))]
     vectorizer = Vectorizer(input="content", stop_words='english')
     tokenizer = vectorizer.build_tokenizer()
     for i in range(len(v)):
         tokens = tokenizer(v[i].lower())
-        # stems = [stemmer.stem(token) for token in tokens]
-        stems = [lemmatizer.lemmatize(token) for token in tokens]
-        sentence = " ".join(stems)
+        lemmas = [lemmatizer.lemmatize(token) for token in tokens]
+        sentence = " ".join(lemmas)
         in_vec[i] = sentence
     tmp = vectorizer.fit_transform(in_vec)
     print(vectorizer.get_feature_names())
