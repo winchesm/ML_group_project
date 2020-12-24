@@ -40,7 +40,6 @@ def prepare_output(v):
 
 
 def prepare_input_l(v):
-    # stemmer = Stemmer("english", ignore_stopwords=True)
     lemmatizer = WordNetLemmatizer()
     in_vec = ["" for x in range(len(v))]
     vectorizer = Vectorizer(input="content", stop_words='english')
@@ -159,12 +158,10 @@ df = df[df['Unnamed: 3'].isnull()]
 df.dropna(subset=['Transcript'], inplace=True)
 df.to_csv("data_sanitized.csv", index=False)
 df = pd.read_csv("data_sanitized.csv")
-#X = prepare_input_s(np.array(df.iloc[:, 2]).astype(str))
-#X = preprocessing.StandardScaler(with_mean=False).fit(X).transform(X)
-#scipy.sparse.save_npz('processed_data.npz', X)
-#X2 = prepare_input_l(np.array(df.iloc[:, 2]).astype(str))
-#X2 = preprocessing.StandardScaler(with_mean=False).fit(X2).transform(X2)
-#scipy.sparse.save_npz('processed_data_lemmatized.npz', X2)
+X = prepare_input_s(np.array(df.iloc[:, 2]).astype(str))
+scipy.sparse.save_npz('processed_data.npz', X)
+X2 = prepare_input_l(np.array(df.iloc[:, 2]).astype(str))
+scipy.sparse.save_npz('processed_data_lemmatized.npz', X2)
 y = prepare_output(df.iloc[:, 1])
 
 data_matrix = scipy.sparse.load_npz('processed_data.npz')
@@ -177,8 +174,6 @@ knn_errors_s = run_knn_s((1, 5, 10, 25, 50, 100))
 knn_errors_l = run_knn_l((1, 5, 10, 25, 50, 100))
 ridge_errors_s = run_ridge_s((0.01, 0.1, 1, 10, 100, 200))
 ridge_errors_l = run_ridge_l((0.01, 0.1, 1, 10, 100, 200))
-# print(knn_errors)
-# print(ridge_errors)
 
 print("Stemmed")
 print("Logistic")
